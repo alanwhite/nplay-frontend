@@ -4,8 +4,8 @@
 const AUTH0_CLIENT_ID = 'vdjlidkvjW7FzbpMqaF8ubd1lci5qUr7';
 const AUTH0_DOMAIN = 'arw001.eu.auth0.com';
 const AUTH0_CALLBACK_URL = window.location.href; // eslint-disable-line
-const PUBLIC_ENDPOINT = 'https://your-aws-endpoint-here.amazonaws.com/dev/api/public';
-const PRIVATE_ENDPOINT = 'https://your-aws-endpoint-here.us-east-1.amazonaws.com/dev/api/private';
+const PUBLIC_ENDPOINT = 'https://5kaml809og.execute-api.eu-west-1.amazonaws.com/dev/nplay/hello';
+const PRIVATE_ENDPOINT = 'https://5kaml809og.execute-api.eu-west-1.amazonaws.com/dev/nplay/private';
 
 // initialize auth0 lock
 const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN); // eslint-disable-line
