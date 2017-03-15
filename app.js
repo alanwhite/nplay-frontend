@@ -20,8 +20,9 @@ lock.on("authenticated", function(authResult) {
       return;
     }
 
-    console.log(authResult.accessToken);
+    console.log(authResult.idToken);
     localStorage.setItem('accessToken', authResult.accessToken);
+    localStorage.setItem('idToken', authResult.idToken);
     localStorage.setItem('profile', JSON.stringify(profile));
 
     document.getElementById('btn-login').style.display = 'none';
@@ -30,7 +31,7 @@ lock.on("authenticated", function(authResult) {
   });
 });
 
-const jwtToken = localStorage.getItem('accessToken');
+const jwtToken = localStorage.getItem('idToken');
 if (jwtToken) {
   document.getElementById('btn-login').style.display = 'none';
   document.getElementById('btn-logout').style.display = 'inline';
@@ -46,6 +47,7 @@ document.getElementById('btn-login').addEventListener('click', function() {
 // Handle logout
 document.getElementById('btn-logout').addEventListener('click', () => {
   localStorage.removeItem('accessToken');
+  localStorage.removeItem('idToken');
   localStorage.removeItem('profile');
   document.getElementById('btn-login').style.display = 'flex';
   document.getElementById('btn-logout').style.display = 'none';
@@ -72,7 +74,7 @@ document.getElementById('btn-public').addEventListener('click', () => {
 // Handle private api call
 document.getElementById('btn-private').addEventListener('click', () => {
   // Call private API with JWT in header
-  const token = localStorage.getItem('accessToken');
+  const token = localStorage.getItem('idToken');
   if (!token) {
     document.getElementById('message').textContent = '';
     document.getElementById('message').textContent = 'You must login to call this protected endpoint!';
