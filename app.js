@@ -10,7 +10,27 @@ const PRIVATE_ENDPOINT = 'https://5kaml809og.execute-api.eu-west-1.amazonaws.com
 // initialize auth0 lock
 const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN); // eslint-disable-line
 
-const jwtToken = localStorage.getItem('userToken');
+// Listening for the authenticated event
+lock.on("authenticated", function(authResult) {
+  // Use the token in authResult to getUserInfo() and save it to localStorage
+  lock.getUserInfo(authResult.accessToken, function(error, profile) {
+    if (error) {
+      console.error('Something went wrong: ', err);
+      alert('Something went wrong, check the Console errors'); // eslint-disable-line no-alert
+      return;
+    }
+
+    console.log(authResult.accessToken);
+    localStorage.setItem('accessToken', authResult.accessToken);
+    localStorage.setItem('profile', JSON.stringify(profile));
+
+    document.getElementById('btn-login').style.display = 'none';
+    document.getElementById('btn-logout').style.display = 'flex';
+    document.getElementById('nick').textContent = profile.nickname;
+  });
+});
+
+const jwtToken = localStorage.getItem('accessToken');
 if (jwtToken) {
   document.getElementById('btn-login').style.display = 'none';
   document.getElementById('btn-logout').style.display = 'inline';
@@ -19,32 +39,13 @@ if (jwtToken) {
 }
 
 // Handle login
-document.getElementById('btn-login').addEventListener('click', () => {
-  lock.show((err, profile, token) => {
-    if (err) {
-      // Error callback
-      console.error('Something went wrong: ', err);
-      alert('Something went wrong, check the Console errors'); // eslint-disable-line no-alert
-    } else {
-      // Success calback
-      console.log(token);
-
-      // Save the JWT token.
-      localStorage.setItem('userToken', token);
-
-      // Save the profile
-      localStorage.setItem('profile', JSON.stringify(profile));
-
-      document.getElementById('btn-login').style.display = 'none';
-      document.getElementById('btn-logout').style.display = 'flex';
-      document.getElementById('nick').textContent = profile.nickname;
-    }
-  });
+document.getElementById('btn-login').addEventListener('click', function() {
+  lock.show();
 });
 
 // Handle logout
 document.getElementById('btn-logout').addEventListener('click', () => {
-  localStorage.removeItem('userToken');
+  localStorage.removeItem('accessToken');
   localStorage.removeItem('profile');
   document.getElementById('btn-login').style.display = 'flex';
   document.getElementById('btn-logout').style.display = 'none';
@@ -71,7 +72,7 @@ document.getElementById('btn-public').addEventListener('click', () => {
 // Handle private api call
 document.getElementById('btn-private').addEventListener('click', () => {
   // Call private API with JWT in header
-  const token = localStorage.getItem('userToken');
+  const token = localStorage.getItem('accessToken');
   if (!token) {
     document.getElementById('message').textContent = '';
     document.getElementById('message').textContent = 'You must login to call this protected endpoint!';
