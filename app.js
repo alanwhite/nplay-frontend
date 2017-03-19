@@ -8,7 +8,15 @@ const PUBLIC_ENDPOINT = 'https://5kaml809og.execute-api.eu-west-1.amazonaws.com/
 const PRIVATE_ENDPOINT = 'https://5kaml809og.execute-api.eu-west-1.amazonaws.com/dev/nplay/private';
 
 // initialize auth0 lock
-const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN); // eslint-disable-line
+
+var options = {
+  auth: {
+    responseType: 'id_token',
+    params: {scope: 'openid email profile'}
+  }
+};
+
+const lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, options); // eslint-disable-line
 
 // Listening for the authenticated event
 lock.on("authenticated", function(authResult) {
