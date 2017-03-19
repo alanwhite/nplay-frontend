@@ -11,8 +11,8 @@ const PRIVATE_ENDPOINT = 'https://5kaml809og.execute-api.eu-west-1.amazonaws.com
 
 var options = {
   auth: {
-    responseType: 'id_token',
-    params: {scope: 'openid email profile'}
+    responseType: 'token',
+    params: {scope: 'openid name email'}
   }
 };
 
